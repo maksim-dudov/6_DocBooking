@@ -62,7 +62,7 @@ DROP TABLE IF EXISTS `doctors`;
 CREATE TABLE IF NOT EXISTS `doctors` (
 `id` int(10) unsigned NOT NULL,
   `fio` tinytext NOT NULL,
-  `specialty_id` int(10) unsigned NOT NULL,
+  `speciality_id` int(10) unsigned NOT NULL,
   `deleted` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -124,7 +124,7 @@ ALTER TABLE `dashboard`
 -- Индексы таблицы `doctors`
 --
 ALTER TABLE `doctors`
- ADD PRIMARY KEY (`id`), ADD KEY `specialty_id` (`specialty_id`);
+ ADD PRIMARY KEY (`id`), ADD KEY `speciality_id` (`speciality_id`);
 
 --
 -- Индексы таблицы `lnk_app_doctors`
