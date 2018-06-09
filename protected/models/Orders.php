@@ -12,6 +12,7 @@
  * @property string $datetime_cancellation
  * @property integer $duration
  * @property string $app_type_id
+ * @property integer $cancelled
  */
 class Orders extends CActiveRecord
 {
@@ -32,7 +33,7 @@ class Orders extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('client_id, doctor_id, datetime_app, datetime_creation, datetime_cancellation, duration, app_type_id', 'required'),
-			array('duration', 'numerical', 'integerOnly'=>true),
+			array('duration, cancelled', 'numerical', 'integerOnly'=>true),
 			array('client_id, doctor_id, app_type_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -68,6 +69,7 @@ class Orders extends CActiveRecord
 			'datetime_cancellation' => 'Datetime Cancellation',
 			'duration' => 'Duration',
 			'app_type_id' => 'App Type',
+			'cancelled' => 'Cancelled',
 		);
 	}
 
@@ -97,6 +99,7 @@ class Orders extends CActiveRecord
 		$criteria->compare('datetime_cancellation',$this->datetime_cancellation,true);
 		$criteria->compare('duration',$this->duration);
 		$criteria->compare('app_type_id',$this->app_type_id,true);
+		$criteria->compare('cancelled',$this->cancelled);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -113,4 +116,9 @@ class Orders extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	protected function makeOrder(){}
+
+	protected function cancelOrder(){}
+
 }

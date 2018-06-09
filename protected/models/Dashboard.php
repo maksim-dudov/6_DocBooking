@@ -11,6 +11,10 @@
  */
 class Dashboard extends CActiveRecord
 {
+	protected $day_start_hour;
+
+	protected $day_end_hour;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -98,4 +102,21 @@ class Dashboard extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	protected function getWindowsByDoctorAndDate(int $doctor_id,Datetime $date)	{
+	}
+
+	protected function closeWindow(int $doctor_id,Datetime $datetime, int $app_type) {
+	}
+
+	protected function flushDashboard() {
+	}
+
+	protected function flushDashBoardByDoctor(int $doctor_id) {
+	}
+
+	protected function checkDateByDoctor(int $doctor_id, int $app_type) {
+
+	}
+
 }

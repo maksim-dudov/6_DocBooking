@@ -172,3 +172,5 @@ MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
 --
 ALTER TABLE `orders`
 MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `orders` ADD `cancelled` BOOLEAN NOT NULL , ADD INDEX (`cancelled`) ;
