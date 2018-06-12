@@ -117,8 +117,18 @@ class Orders extends CActiveRecord
 		return parent::model($className);
 	}
 
-	protected function makeOrder(){}
+	/**
+	 * Добавляет запись ко врачу
+	 * @param int $doctor_id идентификатор врача
+	 * @param DateTime $datetime дата и время начала приёма
+	 * @param int $app_type идентификатор типа приёма
+	 */
+	protected function makeOrder(int $doctor_id, DateTime $datetime, int $app_type){}
 
-	protected function cancelOrder(){}
+	/**
+	 * Отменяет запись ко врачу
+	 * @param int $order_id идентификатор записи
+	 */
+	protected function cancelOrder(int $order_id){}
 
 }

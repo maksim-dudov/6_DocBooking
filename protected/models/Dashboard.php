@@ -103,20 +103,47 @@ class Dashboard extends CActiveRecord
 		return parent::model($className);
 	}
 
+	/**
+	 * Возвращает список окон для записи к конкретному доктору на конкретную дату.
+	 * @param int $doctor_id идентификатор доктора
+	 * @param Datetime $date дата
+	 */
 	protected function getWindowsByDoctorAndDate(int $doctor_id,Datetime $date)	{
 	}
 
+	/**
+	 * Закрывает свободное окно записи ко врачу.
+	 * @param int $doctor_id идентификатор доктора
+	 * @param Datetime $datetime метка даты и времени, начало закрываемого окна
+	 * @param int $app_type идентификатор типа приёма.
+	 * @todo если уходить от строго списка типов приёма и переходить к созданию записи на произвольное время (а не
+	 * строго определённое заранее по типам приёма), то параметр app_type надо заменить на int $duration в минутах
+	 */
 	protected function closeWindow(int $doctor_id,Datetime $datetime, int $app_type) {
 	}
 
+	/**
+	 * Сбрасывает все данные по окнам и пересчитывает их заново на основании имеющихся записей.
+	 * @return void
+	 */
 	protected function flushDashboard() {
 	}
 
-	protected function flushDashBoardByDoctor(int $doctor_id) {
+	/**
+	 * Сбрасывает данные по окнам записи к конкретному врачу
+	 * @param int $doctor_id идентификатор доктора
+	 * @return void
+	 */
+	protected function flushDashboardByDoctor(int $doctor_id) {
 	}
 
-	protected function checkDateByDoctor(int $doctor_id, int $app_type) {
-
+	/**
+	 * Производит оптимизацию окон на указанную дату к указанному врачу.
+	 * Объединяет идущие подряд окна в одно большое общее.
+	 * @param int $doctor_id идентификатор доктора
+	 * @param Datetime $date дата, на какую производится оптимизация
+	 * @todo пока что реализация простейшая, вероятно с развитием функционала нужно будет усложнять
+	 */
+	protected function optimizeDashboardDoctorDay(int $doctor_id, Datetime $date) {
 	}
-
 }
