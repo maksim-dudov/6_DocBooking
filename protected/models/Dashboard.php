@@ -108,7 +108,11 @@ class Dashboard extends CActiveRecord
 	 * @param int $doctor_id идентификатор доктора
 	 * @param Datetime $date дата
 	 */
-	protected function getWindowsByDoctorAndDate(int $doctor_id,Datetime $date)	{
+	public static function getWindowsByDoctorAndDate($doctor_id,Datetime $date)	{
+		$return[] = new DateTime('2018-06-13 09:30:00');
+		$return[] = new DateTime('2018-06-13 12:00:00');
+		$return[] = new DateTime('2018-06-13 14:30:00');
+		return $return;
 	}
 
 	/**

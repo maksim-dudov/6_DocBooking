@@ -102,4 +102,16 @@ class Doctors extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	/**
+	 * Возвращает список докторов.
+	 * @param string $condition
+	 * @param array $params
+	 * @return static[]
+	 */
+	public static function getList($condition='',$params=array())
+	{
+		$criteria = self::model()->getCommandBuilder()->createCriteria($condition, $params);
+		return self::model()->findAll($criteria);
+	}
 }

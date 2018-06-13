@@ -92,4 +92,16 @@ class AppTypes extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	/**
+	 * Возвращает список типов приёма ко врачу.
+	 * @param string $condition
+	 * @param array $params
+	 * @return static[]
+	 */
+	public static function getList($condition='',$params=array())
+	{
+		$criteria = self::model()->getCommandBuilder()->createCriteria($condition, $params);
+		return self::model()->findAll($criteria);
+	}
 }

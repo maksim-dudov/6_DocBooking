@@ -32,7 +32,7 @@ class Orders extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('client_id, doctor_id, datetime_app, datetime_creation, datetime_cancellation, duration, app_type_id', 'required'),
+			array('client_id, doctor_id, datetime_app, datetime_creation, app_type_id', 'required'),
 			array('duration, cancelled', 'numerical', 'integerOnly'=>true),
 			array('client_id, doctor_id, app_type_id', 'length', 'max'=>10),
 			// The following rule is used by search().
@@ -123,7 +123,21 @@ class Orders extends CActiveRecord
 	 * @param DateTime $datetime дата и время начала приёма
 	 * @param int $app_type идентификатор типа приёма
 	 */
-	protected function makeOrder(int $doctor_id, DateTime $datetime, int $app_type){}
+	public function makeOrder($doctor_id, DateTime $datetime, $app_type){
+		$order = new Orders();
+
+		$order->client_id=1;
+
+		$order->doctor_id = $doctor_id;
+		$order->datetime_app = $datetime->format('Y-m-d H:i:s');
+
+		$datetime_creation = new DateTime('now');
+		$order->datetime_creation = $datetime_creation->format('Y-m-d H:i:s');
+		$order->app_type_id = $app_type;
+		$order->cancelled = 0;
+
+		return $order->save();
+	}
 
 	/**
 	 * Отменяет запись ко врачу

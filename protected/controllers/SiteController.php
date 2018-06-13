@@ -27,10 +27,52 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
 		$doctors = new Doctors();
-		$this->render('index',array('doctors'=>$doctors->findAll()));
+
+		if (isset($_POST['Orders'])==false) {
+			$step=1;
+			$prepareData = array();
+			$available_time_raw=array();
+			$order = new Orders();
+
+		}
+		elseif($_POST['Orders']['step'] == 1) {
+			$step=2;
+			$prepareData = $_POST;
+			$available_time=Dashboard::getWindowsByDoctorAndDate(
+				$_POST['Orders']['doctor_id'],
+				new DateTime($_POST['Orders']['datetime_app'])
+			);
+			foreach($available_time as $time){
+				$available_time_raw[$time->format('d.m.Y H:i:s')]=$time->format('H:i');
+			}
+			$order = new Orders();
+			$order->attributes=$_POST['Orders'];
+		}
+		elseif($_POST['Orders']['step'] == 2) {
+
+		$order = new Orders();
+			$result = $order->makeOrder(
+				$_POST['Orders']['doctor_id'],
+				new DateTime(),
+				$_POST['Orders']['app_type_id']
+			);
+
+			$step=3;
+			$prepareData = array();
+			$available_time_raw=array();
+		}
+
+		$this->render('index',
+			array(
+				'doctors'=>$doctors->findAll(),
+				'model'=>$order,
+				'step'=>$step,
+				'prepareData'=>$prepareData,
+				'available_time'=>$available_time_raw,
+				'step'=>$step,
+			)
+		);
 	}
 
 	/**
