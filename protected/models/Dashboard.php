@@ -11,9 +11,17 @@
  */
 class Dashboard extends CActiveRecord
 {
-	protected $day_start_hour;
+	/**
+	 * Час начала приёма врачей
+	 * @var int
+	 */
+	protected $day_start_hour = 9;
 
-	protected $day_end_hour;
+	/**
+	 * Час окончания приёма врачей
+	 * @var int
+	 */
+	protected $day_end_hour = 21;
 
 	/**
 	 * @return string the associated database table name
@@ -106,9 +114,23 @@ class Dashboard extends CActiveRecord
 	/**
 	 * Возвращает список окон для записи к конкретному доктору на конкретную дату.
 	 * @param int $doctor_id идентификатор доктора
-	 * @param Datetime $date дата
+	 * @param $date дата
 	 */
-	public static function getWindowsByDoctorAndDate($doctor_id,Datetime $date)	{
+	public static function getWindowsByDoctorAndDate($doctor_id, $date)	{
+		$return = array();
+		$is_day_open = $this->checkDayIsOpen($doctor_id,$date);
+		// если день у врача полностью свободен - формируем стек последовательного времени для записи
+		if($is_day_open) {
+			$return = array_merge($return, $this->makeListForEmptyDay($doctor_id, $date));
+		}
+		// если уже какие-то записи есть, то перебираем имеющиеся окна и в каждом их них формируем последовательный
+		// список времени для записи
+		else {
+			$windows = array();
+			foreach($windows as $window) {
+				$return = array_merge($return, $this->makeListForWindow($doctor_id, $window['start'], $window['end']));
+			}
+		}
 		$return[] = new DateTime('2018-06-13 09:30:00');
 		$return[] = new DateTime('2018-06-13 12:00:00');
 		$return[] = new DateTime('2018-06-13 14:30:00');
@@ -117,18 +139,20 @@ class Dashboard extends CActiveRecord
 
 	/**
 	 * Закрывает свободное окно записи ко врачу.
+	 * NB! Закомментированный код - заглушка. Инвертировать логику: таблица хранит свободные окна.
 	 * @param int $doctor_id идентификатор доктора
 	 * @param Datetime $datetime метка даты и времени, начало закрываемого окна
 	 * @param int $app_type идентификатор типа приёма.
-	 * @todo если уходить от строго списка типов приёма и переходить к созданию записи на произвольное время (а не
+	 * @todo если уходить от строгого списка типов приёма и переходить к созданию записи на произвольное время (а не
 	 * строго определённое заранее по типам приёма), то параметр app_type надо заменить на int $duration в минутах
 	 */
 	public function closeWindow($doctor_id, $datetime, $app_type_id) {
-		$window = new Dashboard();
-		$window->doctor_id = $doctor_id;
-		$window->datetime = $datetime;
-		$window->duration = AppTypes::getDuration($doctor_id,$app_type_id);
-		$window->save();
+// 		Заглушка - инвертировать логику
+//		$window = new Dashboard();
+//		$window->doctor_id = $doctor_id;
+//		$window->datetime = $datetime;
+//		$window->duration = AppTypes::getDuration($doctor_id,$app_type_id);
+//		$window->save();
 
 		$this->flushDashboardByDoctor($doctor_id);
 	}
@@ -157,4 +181,36 @@ class Dashboard extends CActiveRecord
 	 */
 	protected function optimizeDashboardDoctorDay($doctor_id, Datetime $date) {
 	}
+
+	/**
+	 * Проверяет, есть ли записи за указанный день ко врачу.
+	 * @param $doctor_id идентификатор доктора
+	 * @param $date дата
+	 * @return bool 1 - день полностью свободен, 0 - есть записи на этот день
+	 */
+	protected function checkDayIsOpen($doctor_id,$date){}
+
+	/**
+	 * Формирует список времени, на которое можно записаться по свободному дню.
+	 * @param $doctor_id
+	 * @param $date
+	 * @return array список доступного времени в формате 'H:i'
+	 */
+	protected function makeListForEmptyDay($doctor_id,$date){}
+
+	/**
+	 * Формирует список времени, на которое можно записаться по указанному окну. Т.е. разбивает его
+	 * @param $doctor_id идентификатор врача
+	 * @param $window_start начало окна
+	 * @param $window_end конец окна
+	 * @return array список доступного времени в формате 'H:i'
+	 */
+	protected function makeListForWindow($doctor_id, $window_start, $window_end){}
+
+	/**
+	 * Пересчитывает окна по указанному врачу
+	 * @param $doctor_id
+	 * @return void
+	 */
+	protected function flushDashboardByDoctor($doctor_id)){}
 }
