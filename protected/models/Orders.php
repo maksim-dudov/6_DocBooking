@@ -122,6 +122,8 @@ class Orders extends CActiveRecord
 	 * @param int $doctor_id идентификатор врача
 	 * @param DateTime $datetime дата и время начала приёма
 	 * @param int $app_type идентификатор типа приёма
+	 * @return bool результат сохранения записи в базе
+	 * @todo закрытие в Dashboard можно вынести в afterSave()
 	 */
 	public function makeOrder($doctor_id, DateTime $datetime, $app_type){
 		$order = new Orders();
@@ -136,7 +138,12 @@ class Orders extends CActiveRecord
 		$order->app_type_id = $app_type;
 		$order->cancelled = 0;
 
-		return $order->save();
+		$return = $order->save();
+
+		$dashboard = new Dashboard();
+		$dashboard->closeWindow($order->doctor_id,$order->datetime_creation,$order->app_type_id);
+
+		return $return;
 	}
 
 	/**

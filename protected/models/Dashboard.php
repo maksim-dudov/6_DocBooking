@@ -123,14 +123,21 @@ class Dashboard extends CActiveRecord
 	 * @todo если уходить от строго списка типов приёма и переходить к созданию записи на произвольное время (а не
 	 * строго определённое заранее по типам приёма), то параметр app_type надо заменить на int $duration в минутах
 	 */
-	protected function closeWindow(int $doctor_id,Datetime $datetime, int $app_type) {
+	public function closeWindow($doctor_id, $datetime, $app_type_id) {
+		$window = new Dashboard();
+		$window->doctor_id = $doctor_id;
+		$window->datetime = $datetime;
+		$window->duration = AppTypes::getDuration($doctor_id,$app_type_id);
+		$window->save();
+
+		$this->flushDashboardByDoctor($doctor_id);
 	}
 
 	/**
 	 * Сбрасывает все данные по окнам и пересчитывает их заново на основании имеющихся записей.
 	 * @return void
 	 */
-	protected function flushDashboard() {
+	public function flushDashboard() {
 	}
 
 	/**
@@ -138,7 +145,7 @@ class Dashboard extends CActiveRecord
 	 * @param int $doctor_id идентификатор доктора
 	 * @return void
 	 */
-	protected function flushDashboardByDoctor(int $doctor_id) {
+	protected function flushDashboardByDoctor($doctor_id) {
 	}
 
 	/**
@@ -148,6 +155,6 @@ class Dashboard extends CActiveRecord
 	 * @param Datetime $date дата, на какую производится оптимизация
 	 * @todo пока что реализация простейшая, вероятно с развитием функционала нужно будет усложнять
 	 */
-	protected function optimizeDashboardDoctorDay(int $doctor_id, Datetime $date) {
+	protected function optimizeDashboardDoctorDay($doctor_id, Datetime $date) {
 	}
 }

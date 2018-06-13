@@ -41,7 +41,7 @@ class AppTypes extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'orders'=>array(self::HAS_MANY, 'Orders','app_type_id'),
-			'app'=>array(self::MANY_MANY, 'Doctors','lnk_app_doctors(app_id,dpctor_id)'),
+			'doctors'=>array(self::MANY_MANY, 'Doctors','lnk_app_doctors(app_id,doctor_id)'),
 		);
 	}
 
@@ -103,5 +103,22 @@ class AppTypes extends CActiveRecord
 	{
 		$criteria = self::model()->getCommandBuilder()->createCriteria($condition, $params);
 		return self::model()->findAll($criteria);
+	}
+
+	/**
+	 * Возвращает длительность конкретного типа приёма указанного врача
+	 * @param int $doctor_id идентификатор доктора
+	 * @param $app_id идентификатор типа приёма
+	 * @return int длительность приёма в минутах
+	 */
+	public static function getDuration($doctor_id,$app_id) {
+		$return = Yii::app()->db->createCommand()
+			->select('duration')
+			->from('lnk_app_doctors')
+			->where('doctor_id=:doctor_id',array('doctor_id'=>$doctor_id))
+			->andWhere('app_id=:app_id',array('app_id'=>$app_id))
+			->queryRow();
+
+		return $return['duration'];
 	}
 }
