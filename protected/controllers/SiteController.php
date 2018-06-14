@@ -149,4 +149,14 @@ class SiteController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
+
+	/**
+	 * Displays the contact page
+	 */
+	public function actionTestPage()
+	{
+		$dashboard = new Dashboard();
+		$data = $dashboard->checkDayIsOpen(2,'2018-06-14');
+		$this->render('test',array('data'=>$data));
+	}
 }
