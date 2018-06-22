@@ -188,7 +188,15 @@ class Dashboard extends CActiveRecord
 	 * @param $date дата
 	 * @return bool 1 - день полностью свободен, 0 - есть записи на этот день
 	 */
-	protected function checkDayIsOpen($doctor_id,$date){}
+	public function checkDayIsOpen($doctor_id,$date){
+		$criteria = new CDbCriteria();
+		$criteria->condition = 'doctor_id=:doctor_id AND DATE(datetime_app)=:date';
+		$criteria->params = array(
+			':doctor_id'  => $doctor_id,
+			':date' => $date
+		);
+		return count(Orders::model()->findAll($criteria))?false:true;
+	}
 
 	/**
 	 * Формирует список времени, на которое можно записаться по свободному дню.
@@ -207,10 +215,4 @@ class Dashboard extends CActiveRecord
 	 */
 	protected function makeListForWindow($doctor_id, $window_start, $window_end){}
 
-	/**
-	 * Пересчитывает окна по указанному врачу
-	 * @param $doctor_id
-	 * @return void
-	 */
-	protected function flushDashboardByDoctor($doctor_id)){}
 }
